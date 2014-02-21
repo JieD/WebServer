@@ -4,6 +4,7 @@ require_relative 'configuration'
 module WebServer
   class MimeTypes < Configuration
     def initialize(options={})
+      super(options)
     end
     
     # Returns the mime type for the specified extension
