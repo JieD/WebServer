@@ -18,11 +18,11 @@ describe WebServer::Request do
     end
 
     it 'parses the headers' do
-      expect(request.headers['Host']).to eq 'localhost'
+      expect(request.headers['HOST']).to eq 'localhost'
     end
 
     it 'creates ENV type header names' do
-      expect(request.headers['ContentLength']).to eq '17'
+      expect(request.headers['CONTENT_LENGTH']).to eq '17'
     end
 
     it 'parses the body' do

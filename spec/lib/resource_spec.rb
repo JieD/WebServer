@@ -2,6 +2,8 @@ require 'spec_helper'
 
 describe WebServer::Resource do
   let(:mimes) { double(WebServer::MimeTypes) }
+  let(:access_file) { '.test_access_file' }
+  let(:access_file_path) { "/protected/#{access_file}" }
 
   def conf_double(options={})
     double(WebServer::HttpdConf, {
@@ -15,6 +17,10 @@ describe WebServer::Resource do
       http_method: options.fetch(:method, 'GET'),
       uri: options.fetch(:uri, '/')
     })
+  end
+
+  def protect_directory(directory_path, should_protect)
+    double(File).stub(:exists?).with(directory_path).and_return(should_protect)
   end
 
   describe '#resolve' do
@@ -85,18 +91,65 @@ describe WebServer::Resource do
     end
   end
 
-  # I want these tests, but need to decide how to spec authentication first:
-  # <directory> tags or .htaccess? (or both for EC?)
-# describe '#protected?' do
-#   context 'when protected directory' do
-#     it 'returns true'
-#     it 'returns false if valid credentials supplied'
-#     it 'returns true if invalid credentials supplied'
-#     it 'returns true if no credientials are supplied'
-#   end
-#
-#   context 'when unprotected directory' do
-#     it 'returns false'
-#   end
-# end
+  describe '#protected?' do
+    let(:conf) { conf_double(access_file: '.test_access_file') }
+
+    context 'when resource is in protected directory' do
+      let(:request) { request_double(uri: '/protected/dir/resource.html') }
+
+      before :each do
+        protect_directory access_file_path, true
+      end
+
+      it 'returns true' do
+        expect(WebServer::Resource.new(request, conf, mimes).protected?).to be_true
+      end
+    end
+ 
+    context 'when unprotected directory' do
+      let(:request) { request_double(uri: '/a/resource') }
+
+      before :each do
+        protect_directory access_file_path, false
+      end
+
+      it 'returns false' do
+        expect(WebServer::Resource.new(request, conf, mimes).protected?).to eq false
+      end
+    end
+  end
+
+  describe '#authorized?' do
+    let(:conf) { conf_double(access_file: access_file) }
+    let(:invalid_credentials) { {username: 'invalid_name', password: 'invalid_pwd'} }
+
+    context 'when resource is in protected directory' do 
+      let(:request) { request_double(uri: '/protected/dir/resource.html') }
+      let(:valid_credentials) { {username: 'valid_name', password: 'valid_pwd'} }
+
+      before :each do
+        protect_directory access_file_path, true
+      end
+
+      it 'returns true if valid credentials supplied' do
+        expect(WebServer::Resource.new(request, conf, mimes).authorized?(valid_credentials)).to be_true
+      end
+
+      it 'returns false if invalid credentials supplied' do
+        expect(WebServer::Resource.new(request, conf, mimes).authorized?(invalid_credentials)).to be_false
+      end
+    end
+
+    context 'when unprotected directory' do
+      let(:request) { request_double(uri: '/a/resource') }
+
+      before :each do
+        protect_directory access_file_path, false
+      end
+
+      it 'returns true' do
+        expect(WebServer::Resource.new(request, conf, mimes).authorized?(invalid_credentials)).to be_true
+      end
+    end
+  end
 end

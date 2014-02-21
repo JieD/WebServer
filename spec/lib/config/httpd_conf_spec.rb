@@ -43,6 +43,12 @@ describe WebServer::HttpdConf do
     end
   end
 
+  describe '#access_file_name' do 
+    it 'returns the access file' do
+      expect(httpd_file.access_file_name).to eq 'access_file'
+    end
+  end
+
   describe '#script_aliases' do
     let(:aliases) { ['/script_alias/', '/script_alias_2/'] }
 

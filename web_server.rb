@@ -1,8 +1,7 @@
 require 'socket'
-require 'lib/config/configuration'
-require 'lib/logger'
-require 'lib/error'
-require 'lib/worker'
+Dir.glob('lib/**/*.rb').each do |file|
+  require file
+end
 
 module WebServer
   class Server
