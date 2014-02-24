@@ -1,0 +1,9 @@
+This file records the Jie's working progress.
+
+Team member: Jie Dong
+2/21 Fri     review class, understand the structure of the project
+2/22 Sat     learn how to use git branch and merge, check the setup of team's fork
+2/23 Sun     revise configuration.rb: parse the file once and store all the data.
+             future data inquiry doesn't need to reparse the file again.
+             how to use hash if not knowing key
+             problem: file.method seems not working - no method error
