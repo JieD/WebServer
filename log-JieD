@@ -7,3 +7,5 @@ Team member: Jie Dong
              future data inquiry doesn't need to reparse the file again.
              how to use hash if not knowing key
              problem: file.method seems not working - no method error
+2/25 Tue     complete httpd_conf.rb with comments
+             complete configuration.rb with comments
