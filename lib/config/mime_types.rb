@@ -5,6 +5,7 @@ module WebServer
   class MimeTypes < Configuration
     def initialize(options={})
       super(options)
+#      File.new(@file_path, 'r')
     end
     
     # Returns the mime type for the specified extension
