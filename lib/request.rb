@@ -43,6 +43,7 @@ module WebServer
     # Parse the request from the socket - Note that this method takes no
     # parameters
     def parse
+        
     end
 
     # The following lines provide a suggestion for implementation - feel free
