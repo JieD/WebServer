@@ -9,3 +9,6 @@ Team member: Jie Dong
              problem: file.method seems not working - no method error
 2/25 Tue     complete httpd_conf.rb with comments
              complete configuration.rb with comments
+2/27 Wen     review HTTP request and response
+3/1  Sat     revise configuration.rb and httpd_conf.rb to incorporate mimetypes.rb.
+             finish mimetypes.rb with complete comments

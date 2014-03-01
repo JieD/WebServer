@@ -4,14 +4,17 @@
 module WebServer
   class Configuration
     attr_accessor :file
+    attr_accessor :hash
 
     # parse options to get the file path and check it
     def initialize(options={})	
+      @hash = Hash.new
       file_path = get_path(options)
       raise ArgumentError unless File.exists?(file_path)
       @file = File.new(file_path, 'r')
+      parse_file
     end
-    
+  
     # Parse options to obtain the full directory for the file
     # Since not knowing keys of options (type hash), need to use iterator 
     # to obtain the value and format it
@@ -28,46 +31,34 @@ module WebServer
     # 1. discard empty line and comments
     # 2. extract the information in key-value format and store it in an array
     # 3. store the data in the array into the hash
-    def populate(hash)
+    def parse_file()
       @file.each_line do |line|
         line.chomp!
-       # puts line
+        # puts line
         if line.empty? || line =~ /(\s*)#(.*)/i
           next
         else
           info = extract_info(line)
-          store info, hash
+          store info
         end
       end
     end
     
-    # store the passed in string in key-value format in an array, clean the value if needed
+    # extract the information from the passed in string
+    # split the string into an array. the first element should be the key and the rest are the value (to store in the hash)
+    # clean the value if needed.
+    # return a new array with two elements: key and value 
     def extract_info(line)
       array = line.split
       key = array.first
-      value = array.drop(1)
+      value = array.drop(1)   # drop the first element
       value.each{|e| e.delete! "\""}
       return key, value
     end
-    
+
     # store the information into the hash
-    # need to check whether the key is existed to prevent losing data
-    # the only time the key existed already is for alias type info. need to create a new hash to store the duplicated key data
-    def store(info, hash)
-      key = info.first
-      value = info.last
-      if value.length == 2
-        unless hash.has_key? key
-         sub_hash = Hash.new # create a new hash for alias data
-          hash.store(key, sub_hash)
-        end
-        sub_key = value.first
-        sub_value = value.last
-        sub_hash = hash[key]
-        sub_hash.store(sub_key, sub_value) 
-      else  # non-alias data, note value is an array
-        hash.store(key, value.first)
-      end 
+    # needs to be override in subclasses   
+    def store(info)
     end
   end
 end
