@@ -12,3 +12,5 @@ Team member: Jie Dong
 2/27 Wen     review HTTP request and response
 3/1  Sat     revise configuration.rb and httpd_conf.rb to incorporate mimetypes.rb.
              finish mimetypes.rb with complete comments
+             finish request.rb with complete comments
+             comment out code in worker.rb since it has syntax error
