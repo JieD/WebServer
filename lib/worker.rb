@@ -15,15 +15,16 @@ module WebServer
 
     # Processes the request
     def process_request
-        begin
-            @server,logger,log(request,response)
-        rescue Exception=>error
-        @server,logger,log(request,error_response)
-        ensure
-        @client,
-          puts response
-        @client,
-          close
+        #begin
+         #   @server,logger,log(request,response)
+       # rescue Exception=>error
+       # @server,logger,log(request,error_response)
+#        ensure
+ #       @client,
+  #        puts response
+   #     @client,
+         # close
+       # end
     end
   end
 end
