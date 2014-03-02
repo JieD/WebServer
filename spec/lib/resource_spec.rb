@@ -3,11 +3,12 @@ require 'spec_helper'
 describe WebServer::Resource do
   let(:mimes) { double(WebServer::MimeTypes) }
   let(:access_file) { '.test_access_file' }
-  let(:access_file_path) { "/protected/#{access_file}" }
+  let(:test_doc_root) { '/doc_root' }
+  let(:access_file_path) { "#{test_doc_root}/protected/#{access_file}" }
 
   def conf_double(options={})
     double(WebServer::HttpdConf, {
-      document_root: '/doc_root',
+      document_root: test_doc_root,
       directory_index: 'index.html'
     }.merge(options))
   end
@@ -20,7 +21,8 @@ describe WebServer::Resource do
   end
 
   def protect_directory(directory_path, should_protect)
-    double(File).stub(:exists?).with(directory_path).and_return(should_protect)
+    File.stub(:exists?).and_return(false)
+    File.stub(:exists?).with(directory_path).and_return(should_protect)
   end
 
   describe '#resolve' do
@@ -92,7 +94,7 @@ describe WebServer::Resource do
   end
 
   describe '#protected?' do
-    let(:conf) { conf_double(access_file: '.test_access_file') }
+    let(:conf) { conf_double(access_file_name: '.test_access_file', aliases: [], script_aliases: []) }
 
     context 'when resource is in protected directory' do
       let(:request) { request_double(uri: '/protected/dir/resource.html') }
@@ -120,7 +122,7 @@ describe WebServer::Resource do
   end
 
   describe '#authorized?' do
-    let(:conf) { conf_double(access_file: access_file) }
+    let(:conf) { conf_double(access_file_name: access_file, aliases: [], script_aliases: []) }
     let(:invalid_credentials) { {username: 'invalid_name', password: 'invalid_pwd'} }
 
     context 'when resource is in protected directory' do 
