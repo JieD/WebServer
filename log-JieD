@@ -14,3 +14,6 @@ Team member: Jie Dong
              finish mimetypes.rb with complete comments
              finish request.rb with complete comments
              comment out code in worker.rb since it has syntax error
+3/2 Sun      fixing problems of synchronizing with upstream
+             updating local and origin repo with upstream
+             finish resolve and script_aliased? in resource.rb
