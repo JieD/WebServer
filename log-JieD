@@ -17,3 +17,6 @@ Team member: Jie Dong
 3/2 Sun      fixing problems of synchronizing with upstream
              updating local and origin repo with upstream
              finish resolve and script_aliased? in resource.rb
+3/3 Mon      finish protected? in resource.rb
+             revert changes in worker.rb and web_server.rb
+             review the whole code structure
