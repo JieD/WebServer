@@ -44,5 +44,25 @@ module WebServer
       @request.uri.match /(.*)\/(.*)/i
       @conf.aliases.include? $1  
     end
+   
+    # check whether the requested resource is in protected directory
+    # 1. check whether the protected access file exists
+    # 2. check whether the requested is in the protected directory
+    def protected?
+      if File.exists? "#{@conf.document_root}/protected/#{@conf.access_file_name}"
+        # should check uri, but 
+        File.exists? "#{@conf.document_root}#{@request.uri}"
+      else false # tried to avoid it, but return nil??
+      end    
+    end
+
+    def authorized?
+      if this.protected?
+      end
+    end
+ 
+    def authorized? info
+      info[username] == "valid_name" && info[password] == "valid_pwd"
+    end
   end
 end
