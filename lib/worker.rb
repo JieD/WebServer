@@ -12,8 +12,6 @@ module WebServer
         @client = client 
         @logger = logger
         # process_request
-
-    def initialize(client_socket, server=nil)
     end
 
     # Processes the request
