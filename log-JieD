@@ -20,3 +20,5 @@ Team member: Jie Dong
 3/3 Mon      finish protected? in resource.rb
              revert changes in worker.rb and web_server.rb
              review the whole code structure
+3/4 Tue      work on Resource.protected? and Resource.authorized?
+             learn background info about how does authorization work
