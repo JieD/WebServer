@@ -1,4 +1,12 @@
+# "require" is similar to import in Java
+# require_relative  include files from a relative directory
 require_relative 'response/base'
+
+# modules are a way of groupting together methods, classes and constants. modules give you two major benefits:
+# 1. provide a namespace and prevent name clashes
+# 2. implement mixin facility
+# ModuleName.method / MOduleName::Constant
+# ---------------relative info about code here ---------------------------------
 
 module WebServer
   module Response
@@ -24,6 +32,18 @@ module WebServer
 
     module Factory
       def self.create(resource)
+        if resource.protected?
+          if !resource.authenticated?
+            Response::Forbidden.new(resource) 
+          else
+            Response::Unauthorized.new(resource)
+          end
+        else
+        end
+
+
+
+
         Response::Base.new(resource)
       end
 
