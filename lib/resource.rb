@@ -102,6 +102,5 @@ module WebServer
     def authorized? info
       info[username] == "valid_name" && info[password] == "valid_pwd"
     end
-
   end
 end

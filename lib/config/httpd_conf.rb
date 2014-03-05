@@ -30,7 +30,7 @@ module WebServer
         @hash.store(key, value.first)
       end
     end
-
+  
     # Returns the value of the ServerRoot
     def server_root 
       @hash["ServerRoot"]

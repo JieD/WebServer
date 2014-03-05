@@ -6,6 +6,7 @@ module WebServer
     # allow me to decide if I want my server to print out log
     # messages as they get generated
     def initialize(log_file_path, options={})
+
         @path=log_file_path
         @options={
             'yes'=>'',
@@ -30,6 +31,7 @@ module WebServer
         raise ArgumentError, "unknown option: #{options}" unless @options.option?(options)
         @options[options]=val
     end
+
     # Log a message using the information from Request and 
     # Response objects
     def log(request, response)

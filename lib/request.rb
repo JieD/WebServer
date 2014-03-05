@@ -2,6 +2,7 @@
 module WebServer
   class Request
     attr_accessor :http_method, :uri, :version, :headers, :body, :params, :socket
+
     # Request creation receives a reference to the socket over which
     # the client has connected
     def initialize(socket)
@@ -51,8 +52,7 @@ module WebServer
       '-'
     end
 
-    # Parse the request from the socket - Note that this method takes no
-    # parameters
+    # Parse the request from the socket - Note that this method takes no parameters
     # HTTP Request format:
     # Method Request-URI HTTP-Version
     # Headers

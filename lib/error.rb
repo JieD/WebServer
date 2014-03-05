@@ -3,6 +3,7 @@
 
 module WebServer
   class Error < StandardError
+
       attr_reader :client, :request, :root_exception
       
       def initialize(exception, request, client, response)

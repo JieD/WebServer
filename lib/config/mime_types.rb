@@ -1,3 +1,5 @@
+require_relative 'configuration'
+
 # Parses, stores and exposes the values from the mime.types file
 module WebServer
   class MimeTypes < Configuration
