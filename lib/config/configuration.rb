@@ -2,29 +2,20 @@
 module WebServer
   class Configuration
     attr_accessor :file, :hash
-    # @@no = 0
 
-    # parse options to get the file path and check it
+    # open the file and parse it, store the data in hash
     def initialize(options={})	
-      # @@no += 1
       @hash = Hash.new
-      file_path = get_path(options)
-      raise ArgumentError unless File.exists?(file_path)
-      puts "--- #{file_path}"
-      @file = File.new(file_path, 'r')
-      # print @@no, " #{@file == nil}\n"
+      open_file options
       parse_file
     end
   
-    # Parse options to obtain the full directory for the file
-    # Since not knowing keys of options (type hash), need to use iterator 
-    # to obtain the value and format it
-    # cannot use the following line since not knowing the key: 
-    # file_path = options.fetch(:configuration_directory) + "/" + options.fetch(:conf_file)
-    def get_path(options)
-      path = ""
-      options.each_key {|key| path += options[key] + "/"}
-      path.chop!  # chop the last '/'
+    # parse options to obtain the full directory for the file
+    # File.join saves the work of iterating the hash to obtain the file path
+    def open_file options
+      path = File.join options.values
+      raise ArgumentError unless File.exists?(path)
+      @file = File.new(path, 'r')
     end
 
     # read the file data into hash

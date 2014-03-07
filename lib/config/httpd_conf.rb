@@ -21,7 +21,7 @@ module WebServer
           sub_hash = Hash.new      # create a new hash for the new key
           @hash.store(key, sub_hash)
         end
-        # store value into the subhash, note value is a teo element array
+        # store value into the subhash, note value is a two element array
         sub_key = value.first
         sub_value = value.last
         sub_hash = @hash[key]      # retrieve the subhash
