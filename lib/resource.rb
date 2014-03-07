@@ -10,42 +10,76 @@ module WebServer
    
     # check uri of request to resolve aliased and script aliased issue
     #
-    # note that directory_index is always append last to the absolute path, if the path is not script_aliased
+    # check whether the uri points to a file or a directory
     # if the path is to a directory, need some file to access the directory. if no file is given, need a default file. httpd_conf file specifies which default file to use.
-    def resolve
-      uri = @request.uri
-      uri.match /(.*)\/(.*)/i
-      absolute_path = "#{@conf.document_root}"
+    def resolve      
+       uri = @request.uri
+       flag = uri.include? "."
+       uri_array = uri.split "/"
+       uri.match /(.*)\/(.*)\.(.*)/i
+       absolute_path = "#{@conf.document_root}#{uri}"
+       absolute_path += "/#{@conf.directory_index}" if !flag
+
+      if script_aliased?
+        @conf.script_aliases.each do |e|        
+      #    if uri
+      #  end
+     # elsif aliased?
+
+      #then
+        end
+      end
       
-      if aliased? # need to check aliased? first due to spec test
+     # if aliased? # need to check aliased? first due to spec test
         # puts $1, $2
         # print "aliased: true\n"
         # return format: 
         # document_root + alias path + file + directory_index
-        absolute_path += "#{@conf.alias_path($1)}/#{$2}/#{@conf.directory_index}"
-      else
-        if script_aliased?
+      #  absolute_path += "#{@conf.alias_path($1)}/#{$2}/#{@conf.directory_index}"
+     # else
+      #  if script_aliased?
           # puts $1, $2
           # print "script_aliased: true\n"
           # return format: document_root + script alias path + file
-           absolute_path += "#{@conf.script_alias_path($1)}/#{$2}"
-        else 
+       #    absolute_path += "#{@conf.script_alias_path($1)}/#{$2}"
+       # else 
           # puts $1, $2 
           # print "non_aliased: true\n" 
           # return format: document_root + uri + directory_indes
-          absolute_path += "#{uri}/#{@conf.directory_index}"
-        end
-      end
+        #  absolute_path += "#{uri}/#{@conf.directory_index}"
+       # end
+     # end
     end
 
+    def clean_uri
+      uri = @request.uri
+      flag = uri.include? "."
+      uri = uri.gsub!(/([^\/]*)\.(.*)/, "")[0..-2] if flag
+      uri
+    end
+
+    def match? type
+      uri = clean_uri
+      if type == 1
+        array = @conf.script_aliases
+      else
+        array = @conf.aliases
+      end
+      match_result = false
+      array.each do |e| 
+        match_result = uri.include? e
+        print "#{uri} includes #{e}? #{match_result}\n"
+        if match_result then break end
+      end
+      match_result
+    end
+ 
     def script_aliased?
-      @request.uri.match /(.*)\/(.*)/i
-      @conf.script_aliases.include? $1 
+      match? 1
     end
  
     def aliased?
-      @request.uri.match /(.*)\/(.*)/i
-      @conf.aliases.include? $1  
+      match? 0
     end
    
     def read_htaccess path, hash
