@@ -1,15 +1,18 @@
 # HttpdConf and MimeTypes, both derived from this parent class.
 module WebServer
   class Configuration
-    attr_accessor :file
-    attr_accessor :hash
+    attr_accessor :file, :hash
+    # @@no = 0
 
     # parse options to get the file path and check it
     def initialize(options={})	
+      # @@no += 1
       @hash = Hash.new
       file_path = get_path(options)
       raise ArgumentError unless File.exists?(file_path)
+      puts "--- #{file_path}"
       @file = File.new(file_path, 'r')
+      # print @@no, " #{@file == nil}\n"
       parse_file
     end
   
@@ -21,7 +24,7 @@ module WebServer
     def get_path(options)
       path = ""
       options.each_key {|key| path += options[key] + "/"}
-      path.chop!
+      path.chop!  # chop the last '/'
     end
 
     # read the file data into hash
@@ -30,14 +33,16 @@ module WebServer
     # 2. extract the information in key-value format and store it in an array
     # 3. store the data in the array into the hash
     def parse_file()
-      @file.each_line do |line|
-        line.chomp!
-        # puts line
-        if line.empty? || line =~ /(\s*)#(.*)/i
-          next
-        else
-          info = extract_info(line)
-          store info
+      unless @file.nil?
+        @file.each do |line|
+          line.chomp!
+          # puts line
+          if line.empty? || line =~ /(\s*)#(.*)/i
+            next
+          else
+            info = extract_info(line)
+            store info
+          end
         end
       end
     end
