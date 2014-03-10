@@ -3,6 +3,7 @@ module WebServer
     # Class to handle 500 errors
     class ServerError < Base
       def initialize(resource, options={})
+        @code = 500
       end
     end
   end

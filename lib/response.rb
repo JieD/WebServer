@@ -34,19 +34,40 @@ module WebServer
     module Factory
       def self.create(resource)
         if resource.protected?
-          if !resource.authenticated?
-            Response::Forbidden.new(resource) 
-          else
-            Response::Unauthorized.new(resource)
+          if !auth_info? # no Authorization header, 401
+            response = Response::Unauthorized.new(resource)
+          else 
+            if !resource.authorized? # 403
+              response = Response::Forbidden.new(resource) 
+            else
+              # work the same as no authorization needed 
+              response = no_auth_response resource
+            end
           end
         else
+          response = no_auth_response resource
         end
-        Response::Base.new(resource)
+        response
       end
+   
+      def no_auth_response resource
+        case resource.request_method
+        when "POST" || "PUT"
+          Response::SuccessfullyCreated.new(resource)
+        when "GET"
+          if !File.exists? resource.resolve
+            Response::NotFound.new(resource)
+          else
+            Response::Base.new(resource) 
+            # need to check cache
+          end
+        end
+      end 
 
       def self.error(resource, error_object)
         Response::ServerError.new(resource, exception: error_object)
       end
+
     end
   end
 end
