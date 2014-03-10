@@ -1,7 +1,7 @@
 # The Request class encapsulates the parsing of an HTTP Request
 module WebServer
   class Request
-    attr_accessor :http_method, :uri, :version, :headers, :body, :params, :socket
+    attr_accessor :http_method, :uri, :version, :headers, :body, :params
 
     # Request creation receives a reference to the socket over which
     # the client has connected
@@ -76,11 +76,7 @@ module WebServer
     end
 
     def next_line
-      if @socket.eof?
-        nil
-      else
-        @socket.readline.chomp!
-      end
+      @socket.readline.chomp! unless @socket.eof?
     end
 
     # request line format: 
@@ -111,10 +107,12 @@ module WebServer
 
     # parametera are seperated with '&', and they are in key-value pair seperated with '=' 
     def parse_params(string)
-      param_array = string.split('&')
-      param_array.each do |e|
-        e = e.split('=')
-        @params.store(e.first, e.last)
+      unless string == nil
+        param_array = string.split('&')
+        param_array.each do |e|
+          e = e.split('=')
+          @params.store(e.first, e.last)
+        end
       end
     end
   end
