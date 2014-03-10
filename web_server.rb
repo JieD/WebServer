@@ -37,7 +37,6 @@ module WebServer
       File.join current_dir, @conf.log_file
     end
     def start
-        
       # Begin your 'infinite' loop, reading from the TCPServer, and
       # processing the requests as connections are made
       # @logger.log_message="{SERVER} Starts on port #{conf.port}"
