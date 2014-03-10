@@ -22,3 +22,9 @@ Team member: Jie Dong
              review the whole code structure
 3/4 Tue      work on Resource.protected? and Resource.authorized?
              learn background info about how does authorization work
+3/7 Fri      fix weird error in conf, improve code
+             finish resource.rb resolve to accomodate path to file & dir 
+3/8 Sat      finish resource.rb protected? 
+             work on Response and authentication
+3/9 Sun      finish web_server.rb, worker, logger, Response
+             set up localhost, unable to connect
