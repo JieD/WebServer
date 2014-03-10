@@ -6,17 +6,21 @@ require_relative 'response'
 # any logging, and issue the Response to the client.
 module WebServer
   class Worker
-    # Takes a reference to the client socket and the logger object
-
-    def initialize(client, logger)
+    # Takes a reference to the client socket and the server object
+    def initialize(client, server=nil)
         @client = client 
-        @logger = logger
-        # process_request
+        @server = server
+        process_request
     end
 
     # Processes the request
     def process_request
-      WebServer::Request.new client
+      logger = @server.logger
+      request = WebServer::Request.new @client
+      resource = WebServer::Resource.new request, @server.conf, @server.mime 
+      response = WebServer::Response::Factory.create resource
+      logger.log request, response
+      @client.puts response
     end
   end
 end
